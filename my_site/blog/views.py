@@ -37,7 +37,8 @@ class SinglePostView(View):
         context = {
             "post": post,
             "post_tag": post.tags.all(),
-            "comment_form": CommentForm()
+            "comment_form": CommentForm(),
+            "comments": post.comments.all().order_by("-id")
         }
         return render(request, "blog/post-detail.html", context)
     
@@ -54,6 +55,21 @@ class SinglePostView(View):
         context = {
             "post": post,
             "post_tag": post.tags.all(),
-            "comment_form": comment_form
+            "comment_form": comment_form,
+            "comments": post.comments.all()
         }
         return render(request, "blog/post-detail.html", context)
+    
+class ReadLaterView(View):
+    def post(self, request):
+        stored_posts = request.session.get("stored_post")
+        
+        if stored_posts is None:
+            stored_posts = []
+            
+        post_id = int(request.POST["post_id"])
+        
+        if post_id not in stored_posts:
+            stored_posts.append(post_id)
+            
+        return HttpResponseRedirect("/")
