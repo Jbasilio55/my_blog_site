@@ -17,3 +17,4 @@ class PostForm(forms.ModelForm):
         model = Post
         exclude = ["slug"]
         
+        

@@ -1,19 +1,27 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %} 
 Create Post
 {% endblock %}
 
-{% block content %}
-
-<form action="">
-    <label for="title">Title</label>
-    <input id="title" name="title" type="text">
-    <label for="excerpt">Except</label>
-    <input id="excerpt" name="excerpt" type="text">
-    <button>Send</button>
-
-</form>
-
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'blog/create-post.css' %}"/>
 {% endblock %}
+
+{% block content %}
+    <section>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-control {% if field.errors %}errors{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+            {% endfor %}
+            <button type="submit">Send</button>
+        </form>
+    </section>
+{% endblock %}
+

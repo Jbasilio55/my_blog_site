@@ -2,10 +2,11 @@ from datetime import date
 from typing import Any
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.views import View
+from django.utils.text import slugify
 
 from .models import Post
 from .forms import CommentForm, PostForm
@@ -105,12 +106,23 @@ class ReadLaterView(View):
             request.session["stored_posts"] = stored_posts
         return HttpResponseRedirect("/")
     
-class CreatePost(FormView):
+class CreatePostView(FormView):
     form_class = PostForm
     template_name = "blog/create-post.html"
-    success_url = "blog/index.html"
+    success_url = ""
     
     def form_valid(self, form):
-        form.save()
+        post = form.save(commit=False)
+        
+        original_slug = slugify(post.title)
+        post.slug = original_slug
+
+        num = 1
+        while Post.objects.all().filter(slug=post.slug).exists():
+            post.slug = f"{original_slug}-{num}"
+            num += 1
+
+        post.save()
+        self.success_url = reverse_lazy("post-detail-page", args=[post.slug])
         return super().form_valid(form)
-    
+        
