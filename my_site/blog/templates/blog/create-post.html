@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %} 
+Create Post
+{% endblock %}
+
+{% block content %}
+
+<form action="">
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text">
+    <label for="excerpt">Except</label>
+    <input id="excerpt" name="excerpt" type="text">
+    <button>Send</button>
+
+</form>
+
+{% endblock %}

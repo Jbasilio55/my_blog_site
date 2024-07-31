@@ -4,10 +4,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView
+from django.views.generic.edit import FormView
 from django.views import View
 
 from .models import Post
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 def get_date(post):
     return post["date"]
@@ -103,3 +104,13 @@ class ReadLaterView(View):
             stored_posts.remove(post_id)
             request.session["stored_posts"] = stored_posts
         return HttpResponseRedirect("/")
+    
+class CreatePost(FormView):
+    form_class = PostForm
+    template_name = "blog/create-post.html"
+    success_url = "blog/index.html"
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+    

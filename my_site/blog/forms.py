@@ -1,6 +1,6 @@
 from django import forms
 
-from . models import Comment
+from . models import Comment, Post
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -11,3 +11,9 @@ class CommentForm(forms.ModelForm):
             "user_email": "Your Email",
             "text": "Your Comment",
             }
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ["slug"]
+        
