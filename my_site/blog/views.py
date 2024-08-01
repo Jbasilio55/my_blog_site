@@ -123,6 +123,6 @@ class CreatePostView(FormView):
             num += 1
 
         post.save()
-        self.success_url = reverse_lazy("post-detail-page", args=[post.slug])
+        self.success_url = reverse("post-detail-page", args=[post.slug])
         return super().form_valid(form)
         
