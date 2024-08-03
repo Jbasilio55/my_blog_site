@@ -19,5 +19,8 @@
       "src": "/(.*)",
       "dest": "my_site/wsgi.py"
     }
-  ]
+  ],
+  "build": {
+    "command": "python manage.py collectstatic --noinput"
+  }
 }
